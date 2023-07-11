@@ -9,6 +9,18 @@
 #define NUM_LEDS 6 // We hebben 6 leds op onze ledstrip
 CRGB leds[NUM_LEDS];
 
+int LoterijGetal;
+int rood;
+int groen;
+int blauw;
+
+Servo ServoDeksel; 
+#define DEKSEL_DICHT 75  // Deksel dicht is 0 graden van de servo
+#define DEKSEL_OPEN  5 // Deksel open is 180 graden van de servo
+#define DEKSEL_KIER  40 // Deksel open is 180 graden van de servo
+
+
+
 
 
 void SetupLedStrip(void)
@@ -22,3 +34,20 @@ void SetupLedStrip(void)
   FastLED.show();
   FastLED.show(); // 2x want de eerste call gaat vaak mis
 }  
+
+void setup() {
+  // Alle code in dit setup deel wordt alleen bij opstarten 1x uitgevoerd
+  WiFi.mode(WIFI_OFF); // geen wifi functies, spaart stroom ook
+  
+  // hier de servo's aansluitingen opgeven en ze in de rust stand zetten, armpje in en deksel dicht
+  ServoDeksel.attach(0, 500, 2500); // gele aansluiting GPIO0 of ook wel D3 genoemd
+  ServoDeksel.write(DEKSEL_DICHT);  
+
+  // de schakelaar is aangesloten op massa (G) en ingang D2 (GPIO4)
+  // de ingang word ook voorzien van een positieve spanning om de stand van de schakelaar te kunnen detecteren
+  pinMode(4, INPUT_PULLUP);
+
+  // dit is nodig om het stripje met de 6 leds te laten werken
+  SetupLedStrip();
+   
+}
